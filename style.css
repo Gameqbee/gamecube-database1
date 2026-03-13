@@ -1,182 +1,112 @@
-let currentPage="games";
-let currentSub="";
-
-// -------------------- Daten --------------------
-const data = {
-    games:[
-        {title:"Super Smash Bros. Melee", region:"NTSC", image:""},
-        {title:"Metroid Prime", region:"NTSC", image:""},
-        {title:"Mario Kart Double Dash", region:"PAL", image:""},
-        {title:"F-Zero GX", region:"NTSC-J", image:""}
-    ],
-    packs:{
-        console:[
-            {title:"Mario Kart GameCube Bundle", region:"PAL", image:""},
-            {title:"Pokémon XD Bundle", region:"NTSC", image:""}
-        ],
-        game:[
-            {title:"Mario Party 7 Big Box", region:"PAL", image:""},
-            {title:"Donkey Konga Bundle", region:"NTSC-J", image:""}
-        ]
-    },
-    hardware:{
-        controller:[
-            {title:"GameCube Controller", image:""},
-            {title:"WaveBird Wireless Controller", image:""}
-        ],
-        faceplate:[
-            {title:"Purple Faceplate", image:""},
-            {title:"Silver Faceplate", image:""}
-        ],
-        other:[
-            {title:"Memory Card 251 Blocks", image:""},
-            {title:"Game Boy Player", image:""},
-            {title:"Component Cable", image:""}
-        ]
-    },
-    cards:{
-        pikmin:[
-            {title:"Pikmin 2 Puzzle Card 1", image:""},
-            {title:"Pikmin 2 Puzzle Card 2", image:""}
-        ],
-        animalcrossing:{
-            series1:[{title:"AC e+ Series1 Card 1", amount:1, image:""}],
-            series2:[{title:"AC e+ Series2 Card 1", amount:2, image:""}],
-            series3:[{title:"AC e+ Series3 Card 1", amount:3, image:""}],
-            series4:[{title:"AC e+ Series4 Card 1", amount:4, image:""}],
-        }
-    },
-    promo:{
-        store:[
-            {title:"Store Display Zelda", desc:"Promo Display", image:""}
-        ],
-        disc:[
-            {title:"Promo Disc Master Quest", desc:"Limited Promo Disc", image:""}
-        ],
-        poster:[
-            {title:"Zelda Poster", desc:"Promotional Poster", image:""}
-        ]
-    },
-    kiosk:[
-        {title:"Interactive Demo Disc", region:"NTSC", image:""},
-        {title:"Store Kiosk Disc", region:"PAL", image:""}
-    ]
-};
-
-// -------------------- Seitensteuerung --------------------
-function showPage(page){
-    currentPage=page;
-    currentSub="";
-
-    let subs=[];
-    if(page==="packs") subs=["console","game"];
-    else if(page==="hardware") subs=["controller","faceplate","other"];
-    else if(page==="cards") subs=["pikmin","animalcrossing"];
-    else if(page==="promo") subs=["store","disc","poster"];
-    else subs=[];
-
-    renderSubNav(subs);
-    renderContent();
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#0f172a;
+    color:white;
 }
 
-function renderSubNav(subs){
-    let html="";
-    if(subs.length>0){
-        html=subs.map(s=>`<button onclick="selectSub('${s}')">${s}</button>`).join("");
-    }
-    document.getElementById("subnav").innerHTML=html;
+header{
+    text-align:center;
+    padding:30px;
+    font-size:28px;
+    font-weight:bold;
 }
 
-function selectSub(sub){
-    currentSub=sub;
-    renderContent();
+nav{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    padding:20px;
+    flex-wrap:wrap;
 }
 
-// -------------------- Inhalt rendern --------------------
-function renderContent(){
-    let html="";
-    let filterHTML="";
-
-    if(currentPage==="games"){
-        let items=data.games;
-        filterHTML=renderFilter(["ALL","PAL","NTSC","NTSC-J"]);
-        html=renderGrid(items);
-    }else if(currentPage==="packs"){
-        let items=data.packs[currentSub] || [];
-        filterHTML=renderFilter(["ALL","PAL","NTSC","NTSC-J"]);
-        html=renderGrid(items);
-    }else if(currentPage==="hardware"){
-        let items=data.hardware[currentSub] || [];
-        html=renderGrid(items);
-    }else if(currentPage==="cards"){
-        if(currentSub==="pikmin") html=renderGrid(data.cards.pikmin);
-        else if(currentSub==="animalcrossing"){
-            html="";
-            const seriesList=data.cards.animalcrossing;
-            for(let s in seriesList){
-                html+=`<h3>${s}</h3>` + renderGrid(seriesList[s]);
-            }
-        }
-    }else if(currentPage==="promo"){
-        let items=data.promo[currentSub] || [];
-        html=renderPromo(items);
-    }else if(currentPage==="kiosk"){
-        let items=data.kiosk;
-        filterHTML=renderFilter(["ALL","PAL","NTSC","NTSC-J"]);
-        html=renderGrid(items);
-    }
-
-    document.getElementById("content").innerHTML=filterHTML+html;
+nav button{
+    background:#1e293b;
+    border:none;
+    color:white;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
 }
 
-// -------------------- Filter --------------------
-function renderFilter(options){
-    return `<div class="filter">${options.map(r=>`<button onclick="filterItems('${r}')">${r}</button>`).join("")}</div>`;
+nav button:hover{
+    background:#3b82f6;
 }
 
-function filterItems(region){
-    let items=[];
-    if(currentPage==="games") items=region==="ALL"?data.games:data.games.filter(i=>i.region===region);
-    else if(currentPage==="packs") items=region==="ALL"?data.packs[currentSub]:data.packs[currentSub].filter(i=>i.region===region);
-    else if(currentPage==="kiosk") items=region==="ALL"?data.kiosk:data.kiosk.filter(i=>i.region===region);
-
-    document.getElementById("content").innerHTML=renderFilter(["ALL","PAL","NTSC","NTSC-J"])+renderGrid(items);
+#subnav{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:25px;
+    flex-wrap:wrap;
 }
 
-// -------------------- Grid / Promo Layout --------------------
-function renderGrid(items){
-    let html=`<div class="grid">`;
-    items.forEach(i=>{
-        html+=`
-        <div class="card">
-            <div class="image-frame">
-                ${i.image?`<img src="${i.image}">`:"cover"}
-            </div>
-            <div class="title">${i.title}</div>
-            ${i.region?`<div class="region">${i.region}</div>`:""}
-            ${i.amount?`<div class="region">Amount: ${i.amount}</div>`:""}
-        </div>`;
-    });
-    html+="</div>";
-    return html;
+#subnav button{
+    background:#1e293b;
+    border:none;
+    color:white;
+    padding:6px 14px;
+    border-radius:6px;
+    cursor:pointer;
 }
 
-function renderPromo(items){
-    let html="";
-    items.forEach(i=>{
-        html+=`
-        <div class="card" style="display:flex;gap:15px;align-items:center;">
-            <div class="image-frame" style="flex:0 0 200px; height:200px;">
-                ${i.image?`<img src="${i.image}">`:"image"}
-            </div>
-            <div>
-                <div class="title">${i.title}</div>
-                <div>${i.desc || ""}</div>
-            </div>
-        </div><br>`;
-    });
-    return html;
+#subnav button:hover{
+    background:#3b82f6;
 }
 
-// -------------------- Initialisierung --------------------
-showPage("games");
+#content{
+    max-width:1200px;
+    margin:auto;
+    padding:30px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:#1e293b;
+    border-radius:10px;
+    padding:10px;
+    transition:0.25s;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 10px 20px rgba(0,0,0,0.6);
+}
+
+.image-frame{
+    width:100%;
+    height:260px;
+    border:2px solid #334155;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+.image-frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.title{
+    margin-top:10px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.region{
+    font-size:12px;
+    opacity:0.7;
+}
+
+.filter{
+    text-align:center;
+    margin-bottom:25px;
+}
