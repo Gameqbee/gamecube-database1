@@ -1,94 +1,112 @@
-let currentPage="games";
-let currentSub="";
-
-const data = {
-
-// 🎮 GameCube Spiele (große Liste, alphabetisch + Region wenn allgemein bekannt)
-games: [
-{title:"1080° Avalanche", region:"PAL", image:"images/games/1080avalanche.jpg"},
-{title:"Animal Crossing", region:"NTSC", image:"images/games/animal_crossing.jpg"},
-{title:"Baten Kaitos: Eternal Wings and the Lost Ocean", region:"NTSC-J", image:"images/games/baten_kaitos.jpg"},
-{title:"Billy Hatcher and the Giant Egg", region:"PAL", image:"images/games/billy_hatcher.jpg"},
-{title:"Donkey Konga", region:"PAL", image:"images/games/donkey_konga.jpg"},
-{title:"Eternal Darkness: Sanity’s Requiem", region:"NTSC", image:"images/games/eternal_darkness.jpg"},
-{title:"Fire Emblem: Path of Radiance", region:"NTSC", image:"images/games/fire_emblem_pr.jpg"},
-{title:"F-Zero GX", region:"NTSC-J", image:"images/games/fzero_gx.jpg"},
-{title:"Luigi’s Mansion", region:"PAL", image:"images/games/luigi_mansion.jpg"},
-{title:"Mario Kart: Double Dash!!", region:"PAL", image:"images/games/mk_dd.jpg"},
-{title:"Metroid Prime", region:"NTSC", image:"images/games/metroid_prime.jpg"},
-{title:"Paper Mario: The Thousand-Year Door", region:"NTSC", image:"images/games/paper_mario_ttyd.jpg"},
-{title:"Resident Evil 4", region:"NTSC", image:"images/games/re4.jpg"},
-{title:"Soulcalibur II", region:"NTSC", image:"images/games/soulcalibur2.jpg"},
-{title:"Star Fox Adventures", region:"NTSC", image:"images/games/starfox_adventures.jpg"},
-{title:"Super Mario Sunshine", region:"PAL", image:"images/games/super_mario_sunshine.jpg"},
-{title:"Super Smash Bros. Melee", region:"NTSC", image:"images/games/ssbm.jpg"},
-// … (Du kannst noch viele weitere manuell hinzufügen)
-],
-
-// 📦 Konsolen Packs & Bundles
-packs:{
-console:[
-{title:"GameCube Mario Kart: Double Dash!! Pak", region:"PAL", image:"images/packs/gc_mk_bundle_pal.jpg"},
-{title:"GameCube Soulcalibur II Super Pak", region:"NTSC", image:"images/packs/gc_soulcalibur2_ntsc.jpg"},
-{title:"GameCube Resident Evil 4 Limited Edition Pak", region:"NTSC", image:"images/packs/gc_re4bundle_ntsc.jpg"},
-{title:"GameCube Final Fantasy Crystal Chronicles Bundle", region:"NTSC-J", image:"images/packs/gc_ffcc_j.jpg"}
-],
-game:[
-{title:"Mario Party 7 Big Box", region:"PAL", image:"images/packs/mp7_bigbox_pal.jpg"},
-{title:"Donkey Konga Pack", region:"NTSC-J", image:"images/packs/donkey_konga_box_j.jpg"},
-{title:"Super Mario Sunshine Big Box", region:"NTSC", image:"images/packs/sms_bigbox_ntsc.jpg"}
-]
-},
-
-// 🛠 Hardware Kategorien
-hardware:{
-controller:[
-{title:"Nintendo GameCube Controller (Standard)", image:"images/hardware/controller_standard.jpg"},
-{title:"WaveBird Wireless Controller", image:"images/hardware/wavebird.jpg"}
-],
-faceplate:[
-{title:"Indigo Faceplate", image:"images/hardware/faceplate_indigo.jpg"},
-{title:"Black Faceplate", image:"images/hardware/faceplate_black.jpg"}
-],
-other:[
-{title:"GameCube Memory Card 251", image:"images/hardware/memorycard_251.jpg"},
-{title:"Game Boy Player", image:"images/hardware/gameboy_player.jpg"},
-{title:"Component Cable", image:"images/hardware/component_cable.jpg"}
-]
-},
-
-// 🃏 Cards
-cards:{
-pikmin:[
-{title:"Pikmin 2 Puzzle Card A", image:"images/cards/pikmin2_a.jpg"},
-{title:"Pikmin 2 Puzzle Card B", image:"images/cards/pikmin2_b.jpg"}
-],
-animalcrossing:{
-series1:[{title:"AC e+ Series1 Card001", amount:1, image:"images/cards/ac_eplus_s1_001.jpg"}],
-series2:[{title:"AC e+ Series2 Card010", amount:10, image:"images/cards/ac_eplus_s2_010.jpg"}],
-series3:[{title:"AC e+ Series3 Card025", amount:25, image:"images/cards/ac_eplus_s3_025.jpg"}],
-series4:[{title:"AC e+ Series4 Card050", amount:50, image:"images/cards/ac_eplus_s4_050.jpg"}]
+body {
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#0f172a;
+    color:white;
 }
-},
 
-// 🎁 Promo
-promo:{
-store:[
-{title:"Zelda Store Display Sign", desc:"Promo Display für Zelda", image:"images/promo/zelda_display.jpg"}
-],
-disc:[
-{title:"Demo Disc: Nintendo GameCube Sampler", desc:"Promo Demo Disc", image:"images/promo/demo_disc.jpg"}
-],
-poster:[
-{title:"Super Smash Bros. Melee Poster", desc:"Original Werbeposter", image:"images/promo/ssbm_poster.jpg"}
-]
-},
+header {
+    text-align:center;
+    padding:30px;
+    font-size:28px;
+    font-weight:bold;
+}
 
-// 📀 Kiosk / Demo
-kiosk:[
-{title:"GameCube Interactive Demo Disc (NTSC)", region:"NTSC", image:"images/promo/kiosk_ntsc.jpg"},
-{title:"Store Kiosk Disc (PAL)", region:"PAL", image:"images/promo/kiosk_pal.jpg"}
-]
-};
+nav {
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    padding:20px;
+    flex-wrap:wrap;
+}
 
-// … (Render‑Funktionen bleiben gleich wie früher …)
+nav button {
+    background:#1e293b;
+    border:none;
+    color:white;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+nav button:hover {
+    background:#3b82f6;
+}
+
+#subnav {
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+}
+
+#subnav button {
+    background:#1e293b;
+    border:none;
+    color:white;
+    padding:6px 14px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+#subnav button:hover {
+    background:#3b82f6;
+}
+
+#content {
+    max-width:1200px;
+    margin:auto;
+    padding:30px;
+}
+
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:25px;
+}
+
+.card {
+    background:#1e293b;
+    border-radius:10px;
+    padding:10px;
+    transition:0.25s;
+}
+
+.card:hover {
+    transform:translateY(-6px);
+    box-shadow:0 10px 20px rgba(0,0,0,0.6);
+}
+
+.image-frame {
+    width:100%;
+    height:260px;
+    border:2px solid #334155;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+.image-frame img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.title {
+    margin-top:10px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.region {
+    font-size:12px;
+    opacity:0.7;
+}
+
+.filter {
+    text-align:center;
+    margin-bottom:25px;
+}
