@@ -1,69 +1,71 @@
 let currentPage="games";
 let currentSub="";
 
-// -------------------- Daten --------------------
 const data = {
     games:[
-        {title:"Super Smash Bros. Melee", region:"NTSC", image:""},
-        {title:"Metroid Prime", region:"NTSC", image:""},
-        {title:"Mario Kart Double Dash", region:"PAL", image:""},
-        {title:"F-Zero GX", region:"NTSC-J", image:""}
+        {title:"Super Smash Bros. Melee", region:"NTSC", image:"images/games/melee.jpg"},
+        {title:"Metroid Prime", region:"NTSC", image:"images/games/metroid_prime.jpg"},
+        {title:"Mario Kart: Double Dash!!", region:"PAL", image:"images/games/mk_dd.jpg"},
+        {title:"The Legend of Zelda: The Wind Waker", region:"PAL", image:"images/games/zelda_wind_waker.jpg"},
+        {title:"F-Zero GX", region:"NTSC-J", image:"images/games/fzero_gx.jpg"},
+        {title:"Luigi’s Mansion", region:"PAL", image:"images/games/luigi_mansion.jpg"},
+        {title:"Animal Crossing", region:"NTSC", image:"images/games/animal_crossing.jpg"},
     ],
     packs:{
         console:[
-            {title:"Mario Kart GameCube Bundle", region:"PAL", image:""},
-            {title:"Pokémon XD Bundle", region:"NTSC", image:""}
+            {title:"GameCube Mario Kart Bundle (PAL)", region:"PAL", image:"images/packs/gc_mk_bundle_pal.jpg"},
+            {title:"GameCube Pokémon XD Bundle (NTSC)", region:"NTSC", image:"images/packs/gc_pokemon_xd_bundle_ntsc.jpg"}
         ],
         game:[
-            {title:"Mario Party 7 Big Box", region:"PAL", image:""},
-            {title:"Donkey Konga Bundle", region:"NTSC-J", image:""}
+            {title:"Mario Party 7 Big Box (PAL)", region:"PAL", image:"images/packs/mp7_bigbox_pal.jpg"},
+            {title:"Donkey Konga Pack (NTSC-J)", region:"NTSC-J", image:"images/packs/donkey_konga_j.jpg"},
+            {title:"Super Mario Sunshine Big Box (NTSC)", region:"NTSC", image:"images/packs/sms_bigbox_ntsc.jpg"}
         ]
     },
     hardware:{
         controller:[
-            {title:"GameCube Controller", image:""},
-            {title:"WaveBird Wireless Controller", image:""}
+            {title:"Nintendo GameCube Controller (Standard)", image:"images/hardware/controller_standard.jpg"},
+            {title:"WaveBird Wireless Controller", image:"images/hardware/wavebird.jpg"}
         ],
         faceplate:[
-            {title:"Purple Faceplate", image:""},
-            {title:"Silver Faceplate", image:""}
+            {title:"Indigo Faceplate", image:"images/hardware/faceplate_indigo.jpg"},
+            {title:"Black Faceplate", image:"images/hardware/faceplate_black.jpg"}
         ],
         other:[
-            {title:"Memory Card 251 Blocks", image:""},
-            {title:"Game Boy Player", image:""},
-            {title:"Component Cable", image:""}
+            {title:"GameCube Memory Card 251", image:"images/hardware/memorycard_251.jpg"},
+            {title:"Game Boy Player", image:"images/hardware/gameboy_player.jpg"},
+            {title:"Component Cable", image:"images/hardware/component_cable.jpg"}
         ]
     },
     cards:{
         pikmin:[
-            {title:"Pikmin 2 Puzzle Card 1", image:""},
-            {title:"Pikmin 2 Puzzle Card 2", image:""}
+            {title:"Pikmin 2 Puzzle Card A", image:"images/cards/pikmin2_a.jpg"},
+            {title:"Pikmin 2 Puzzle Card B", image:"images/cards/pikmin2_b.jpg"}
         ],
         animalcrossing:{
-            series1:[{title:"AC e+ Series1 Card 1", amount:1, image:""}],
-            series2:[{title:"AC e+ Series2 Card 1", amount:2, image:""}],
-            series3:[{title:"AC e+ Series3 Card 1", amount:3, image:""}],
-            series4:[{title:"AC e+ Series4 Card 1", amount:4, image:""}],
+            series1:[{title:"AC e+ Series 1 Card 001", amount:1, image:"images/cards/ac_eplus_s1_001.jpg"}],
+            series2:[{title:"AC e+ Series 2 Card 010", amount:10, image:"images/cards/ac_eplus_s2_010.jpg"}],
+            series3:[{title:"AC e+ Series 3 Card 025", amount:25, image:"images/cards/ac_eplus_s3_025.jpg"}],
+            series4:[{title:"AC e+ Series 4 Card 050", amount:50, image:"images/cards/ac_eplus_s4_050.jpg"}],
         }
     },
     promo:{
         store:[
-            {title:"Store Display Zelda", desc:"Promo Display", image:""}
+            {title:"Zelda Store Display Sign", desc:"In‑Store Display für Zelda Promotion", image:"images/promo/zelda_display.jpg"}
         ],
         disc:[
-            {title:"Promo Disc Master Quest", desc:"Limited Promo Disc", image:""}
+            {title:"Demo Disc: Nintendo GameCube Sampler", desc:"Promo Demo Disc mit mehreren Titeln", image:"images/promo/demo_disc.jpg"}
         ],
         poster:[
-            {title:"Zelda Poster", desc:"Promotional Poster", image:""}
+            {title:"Super Smash Bros. Melee Poster", desc:"Werbeposter aus dem Jahr 2001", image:"images/promo/ssbm_poster.jpg"}
         ]
     },
     kiosk:[
-        {title:"Interactive Demo Disc", region:"NTSC", image:""},
-        {title:"Store Kiosk Disc", region:"PAL", image:""}
+        {title:"GameCube Interactive Demo Disc (NTSC)", region:"NTSC", image:"images/promo/kiosk_ntsc.jpg"},
+        {title:"Store Kiosk Disc (PAL)", region:"PAL", image:"images/promo/kiosk_pal.jpg"}
     ]
 };
 
-// -------------------- Seitensteuerung --------------------
 function showPage(page){
     currentPage=page;
     currentSub="";
@@ -92,7 +94,6 @@ function selectSub(sub){
     renderContent();
 }
 
-// -------------------- Inhalt rendern --------------------
 function renderContent(){
     let html="";
     let filterHTML="";
@@ -129,7 +130,6 @@ function renderContent(){
     document.getElementById("content").innerHTML=filterHTML+html;
 }
 
-// -------------------- Filter --------------------
 function renderFilter(options){
     return `<div class="filter">${options.map(r=>`<button onclick="filterItems('${r}')">${r}</button>`).join("")}</div>`;
 }
@@ -143,7 +143,6 @@ function filterItems(region){
     document.getElementById("content").innerHTML=renderFilter(["ALL","PAL","NTSC","NTSC-J"])+renderGrid(items);
 }
 
-// -------------------- Grid / Promo Layout --------------------
 function renderGrid(items){
     let html=`<div class="grid">`;
     items.forEach(i=>{
@@ -178,5 +177,4 @@ function renderPromo(items){
     return html;
 }
 
-// -------------------- Initialisierung --------------------
 showPage("games");
