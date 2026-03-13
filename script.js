@@ -1,3 +1,7 @@
+let currentPage="games";
+let currentSub="";
+
+// -------------------- Daten --------------------
 const data = {
     games:[
         {title:"Super Smash Bros. Melee", region:"NTSC", image:""},
@@ -10,21 +14,24 @@ const data = {
             {title:"Mario Kart GameCube Bundle", region:"PAL", image:""},
             {title:"Pokémon XD Bundle", region:"NTSC", image:""}
         ],
-        bigbox:[
+        game:[
             {title:"Mario Party 7 Big Box", region:"PAL", image:""},
             {title:"Donkey Konga Bundle", region:"NTSC-J", image:""}
         ]
     },
     hardware:{
         controller:[
-            {title:"GameCube Controller", image:""}
+            {title:"GameCube Controller", image:""},
+            {title:"WaveBird Wireless Controller", image:""}
         ],
         faceplate:[
-            {title:"Purple Faceplate", image:""}
+            {title:"Purple Faceplate", image:""},
+            {title:"Silver Faceplate", image:""}
         ],
-        accessories:[
+        other:[
             {title:"Memory Card 251 Blocks", image:""},
-            {title:"Game Boy Player", image:""}
+            {title:"Game Boy Player", image:""},
+            {title:"Component Cable", image:""}
         ]
     },
     cards:{
@@ -32,23 +39,22 @@ const data = {
             {title:"Pikmin 2 Puzzle Card 1", image:""},
             {title:"Pikmin 2 Puzzle Card 2", image:""}
         ],
-        animalcrossing:[
-            {title:"AC e+ Series 1", image:""},
-            {title:"AC e+ Series 2", image:""}
-        ]
+        animalcrossing:{
+            series1:[{title:"AC e+ Series1 Card 1", amount:1, image:""}],
+            series2:[{title:"AC e+ Series2 Card 1", amount:2, image:""}],
+            series3:[{title:"AC e+ Series3 Card 1", amount:3, image:""}],
+            series4:[{title:"AC e+ Series4 Card 1", amount:4, image:""}],
+        }
     },
     promo:{
         store:[
-            {title:"Store Display Zelda", desc:"Promo Display", image:""},
+            {title:"Store Display Zelda", desc:"Promo Display", image:""}
         ],
         disc:[
             {title:"Promo Disc Master Quest", desc:"Limited Promo Disc", image:""}
         ],
         poster:[
             {title:"Zelda Poster", desc:"Promotional Poster", image:""}
-        ],
-        other:[
-            {title:"Nintendo Kiosk", desc:"Demo Kiosk Item", image:""}
         ]
     },
     kiosk:[
@@ -57,26 +63,19 @@ const data = {
     ]
 };
 
-// Hilfsfunktionen
-let currentPage="games";
-let currentSub="";
-
+// -------------------- Seitensteuerung --------------------
 function showPage(page){
     currentPage=page;
     currentSub="";
 
-    if(page==="games" || page==="kiosk"){
-        renderSubNav([]);
-    }else if(page==="packs"){
-        renderSubNav(["console","bigbox"]);
-    }else if(page==="hardware"){
-        renderSubNav(["controller","faceplate","accessories"]);
-    }else if(page==="cards"){
-        renderSubNav(["pikmin","animalcrossing"]);
-    }else if(page==="promo"){
-        renderSubNav(["store","disc","poster","other"]);
-    }
+    let subs=[];
+    if(page==="packs") subs=["console","game"];
+    else if(page==="hardware") subs=["controller","faceplate","other"];
+    else if(page==="cards") subs=["pikmin","animalcrossing"];
+    else if(page==="promo") subs=["store","disc","poster"];
+    else subs=[];
 
+    renderSubNav(subs);
     renderContent();
 }
 
@@ -93,63 +92,58 @@ function selectSub(sub){
     renderContent();
 }
 
+// -------------------- Inhalt rendern --------------------
 function renderContent(){
     let html="";
     let filterHTML="";
 
     if(currentPage==="games"){
         let items=data.games;
-        filterHTML=`<div class="filter">
-            <button onclick="filterItems('ALL')">All</button>
-            <button onclick="filterItems('PAL')">PAL</button>
-            <button onclick="filterItems('NTSC')">NTSC</button>
-            <button onclick="filterItems('NTSC-J')">NTSC-J</button>
-        </div>`;
+        filterHTML=renderFilter(["ALL","PAL","NTSC","NTSC-J"]);
         html=renderGrid(items);
     }else if(currentPage==="packs"){
         let items=data.packs[currentSub] || [];
-        filterHTML=`<div class="filter">
-            <button onclick="filterItems('ALL')">All</button>
-            <button onclick="filterItems('PAL')">PAL</button>
-            <button onclick="filterItems('NTSC')">NTSC</button>
-            <button onclick="filterItems('NTSC-J')">NTSC-J</button>
-        </div>`;
+        filterHTML=renderFilter(["ALL","PAL","NTSC","NTSC-J"]);
         html=renderGrid(items);
     }else if(currentPage==="hardware"){
         let items=data.hardware[currentSub] || [];
         html=renderGrid(items);
     }else if(currentPage==="cards"){
-        let items=data.cards[currentSub] || [];
-        html=renderGrid(items);
+        if(currentSub==="pikmin") html=renderGrid(data.cards.pikmin);
+        else if(currentSub==="animalcrossing"){
+            html="";
+            const seriesList=data.cards.animalcrossing;
+            for(let s in seriesList){
+                html+=`<h3>${s}</h3>` + renderGrid(seriesList[s]);
+            }
+        }
     }else if(currentPage==="promo"){
         let items=data.promo[currentSub] || [];
         html=renderPromo(items);
     }else if(currentPage==="kiosk"){
         let items=data.kiosk;
-        filterHTML=`<div class="filter">
-            <button onclick="filterItems('ALL')">All</button>
-            <button onclick="filterItems('PAL')">PAL</button>
-            <button onclick="filterItems('NTSC')">NTSC</button>
-            <button onclick="filterItems('NTSC-J')">NTSC-J</button>
-        </div>`;
+        filterHTML=renderFilter(["ALL","PAL","NTSC","NTSC-J"]);
         html=renderGrid(items);
     }
 
     document.getElementById("content").innerHTML=filterHTML+html;
 }
 
-function filterItems(region){
-    let items=[];
-    if(currentPage==="games"){
-        items=region==="ALL"?data.games:data.games.filter(i=>i.region===region);
-    }else if(currentPage==="packs"){
-        items=region==="ALL"?data.packs[currentSub]:data.packs[currentSub].filter(i=>i.region===region);
-    }else if(currentPage==="kiosk"){
-        items=region==="ALL"?data.kiosk:data.kiosk.filter(i=>i.region===region);
-    }
-    document.getElementById("content").innerHTML=renderGrid(items);
+// -------------------- Filter --------------------
+function renderFilter(options){
+    return `<div class="filter">${options.map(r=>`<button onclick="filterItems('${r}')">${r}</button>`).join("")}</div>`;
 }
 
+function filterItems(region){
+    let items=[];
+    if(currentPage==="games") items=region==="ALL"?data.games:data.games.filter(i=>i.region===region);
+    else if(currentPage==="packs") items=region==="ALL"?data.packs[currentSub]:data.packs[currentSub].filter(i=>i.region===region);
+    else if(currentPage==="kiosk") items=region==="ALL"?data.kiosk:data.kiosk.filter(i=>i.region===region);
+
+    document.getElementById("content").innerHTML=renderFilter(["ALL","PAL","NTSC","NTSC-J"])+renderGrid(items);
+}
+
+// -------------------- Grid / Promo Layout --------------------
 function renderGrid(items){
     let html=`<div class="grid">`;
     items.forEach(i=>{
@@ -160,6 +154,7 @@ function renderGrid(items){
             </div>
             <div class="title">${i.title}</div>
             ${i.region?`<div class="region">${i.region}</div>`:""}
+            ${i.amount?`<div class="region">Amount: ${i.amount}</div>`:""}
         </div>`;
     });
     html+="</div>";
@@ -183,5 +178,5 @@ function renderPromo(items){
     return html;
 }
 
-// Seite initial anzeigen
+// -------------------- Initialisierung --------------------
 showPage("games");
