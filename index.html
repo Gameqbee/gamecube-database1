@@ -1,121 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GameCube Database</title>
 
-<style>
-body{
-    margin:0;
-    font-family:Arial, Helvetica, sans-serif;
-    background:#0f172a;
-    color:white;
-}
+<title>GameCube Archive</title>
 
-header{
-    padding:25px;
-    text-align:center;
-    font-size:28px;
-    font-weight:bold;
-}
+<link rel="stylesheet" href="style.css">
 
-nav{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    padding:20px;
-}
-
-nav button{
-    background:#1e293b;
-    border:none;
-    padding:15px 25px;
-    color:white;
-    font-size:16px;
-    border-radius:10px;
-    cursor:pointer;
-    transition:0.2s;
-}
-
-nav button:hover{
-    background:#3b82f6;
-}
-
-#content{
-    max-width:900px;
-    margin:auto;
-    padding:40px;
-    text-align:center;
-    background:#1e293b;
-    border-radius:15px;
-}
-</style>
 </head>
 
 <body>
 
 <header>
-Nintendo GameCube Database
+
+Nintendo GameCube Archive
+
 </header>
 
 <nav>
+
 <button onclick="showPage('games')">Games</button>
 <button onclick="showPage('packs')">Packs</button>
-<button onclick="showPage('accessories')">Accessories</button>
+<button onclick="showPage('hardware')">Hardware</button>
 <button onclick="showPage('cards')">Cards</button>
 <button onclick="showPage('promo')">Promo</button>
+<button onclick="showPage('kiosk')">Kiosk / Demo Discs</button>
+
 </nav>
 
-<div id="content">
-<h2>Welcome</h2>
-<p>Select a category above.</p>
-</div>
+<div id="content"></div>
 
-<script>
-
-function showPage(page){
-
-let content=document.getElementById("content");
-
-if(page==="games"){
-content.innerHTML=`
-<h2>Games</h2>
-<p>GameCube games database coming soon.</p>
-`;
-}
-
-if(page==="packs"){
-content.innerHTML=`
-<h2>Packs</h2>
-<p>Console bundles and packs.</p>
-`;
-}
-
-if(page==="accessories"){
-content.innerHTML=`
-<h2>Accessories</h2>
-<p>Controllers, cables and other accessories.</p>
-`;
-}
-
-if(page==="cards"){
-content.innerHTML=`
-<h2>Cards</h2>
-<p>Memory cards and special cards.</p>
-`;
-}
-
-if(page==="promo"){
-content.innerHTML=`
-<h2>Promo</h2>
-<p>Promotional items and rare releases.</p>
-`;
-}
-
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
+
 </html>
